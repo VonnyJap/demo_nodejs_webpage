@@ -26,9 +26,7 @@ jobs:
 workflows:
   build_test_and_docker:
     jobs:
-      - build_test:
-          requires:
-            - build_docker_image
+      - build_test
       - build_docker_image:
           requires:
             - build_test
