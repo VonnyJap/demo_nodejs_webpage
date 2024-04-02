@@ -24,8 +24,11 @@ jobs:
             docker push adijaiswal/nodejswebapp1:latest
 
 workflows:
-  build_test:
+  build_test_and_docker:
     jobs:
-      - build_test
-      - build_docker_image
-      
+      - build_test:
+          requires:
+            - build_docker_image
+      - build_docker_image:
+          requires:
+            - build_test
