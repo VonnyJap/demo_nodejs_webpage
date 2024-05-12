@@ -1,32 +1,156 @@
 version: 2.1
+
 jobs:
-  build_test:
+  build:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14.17
     steps:
       - checkout
-      - run:
-          name: Install npm dependencies
-          command: |
-            npm install --save	
-  build_docker_image:
+      - run: npm install
+      - run: npm test
+
+  lint:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14.17
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: Build Docker image
-          command: |
-            docker build -t nodejswebapp1 -t adijaiswal/nodejswebapp1:latest .
-            echo $DOCKER_PASSWORD | docker login -u adijaiswal --password-stdin
-            docker push adijaiswal/nodejswebapp1:latest
+      - run: npm install eslint
+      - run: eslint .
+
+  deploy_dev:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run: echo "Deploying to dev environment"
+
+  deploy_prod:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run: pip install awscli
+      - run: echo "Deploying to prod environment"
+
+  performance_test:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run: pip install locust
+      - run: echo "Running performance tests"
+
+  security_scan:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run: pip install bandit
+      - run: echo "Running security scan"
+
+  test_integration:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run: echo "Running integration tests"
+
+  # build_android:
+  #   docker:
+  #     - image: circleci/android:api-29
+  #   steps:
+  #     - checkout
+  #     - run: ./gradlew assembleDebug
+
+  # deploy_android_beta:
+  #   docker:
+  #     - image: circleci/android:api-29
+  #   steps:
+  #     - checkout
+  #     - run: ./gradlew assembleRelease
+  #     - run: firebase appdistribution:distribute --app your-android-app --release-notes "Beta release" app/build/outputs/apk/release/app-release.apk
+
+  # deploy_android_prod:
+  #   docker:
+  #     - image: circleci/android:api-29
+  #   steps:
+  #     - checkout
+  #     - run: ./gradlew assembleRelease
+  #     - run: firebase appdistribution:distribute --app your-android-app --release-notes "Production release" app/build/outputs/apk/release/app-release.apk
+
+  # build_ios:
+  #   macos:
+  #     xcode: "12.5.1"
+  #   steps:
+  #     - checkout
+  #     - run: xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.5' clean build
+
+  # deploy_ios_beta:
+  #   macos:
+  #     xcode: "12.5.1"
+  #   steps:
+  #     - checkout
+  #     - run: xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -destination 'generic/platform=iOS' archive -archivePath build/YourApp.xcarchive
+  #     - run: xcodebuild -exportArchive -archivePath build/YourApp.xcarchive -exportOptionsPlist exportOptions.plist -exportPath build/YourApp.ipa
+  #     - run: fir publish build/YourApp.ipa
+  # build_test:
+  #   docker:
+  #     - image: circleci/node:12
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install npm dependencies
+  #         command: |
+  #           npm install --save	
+  # build_docker_image:
+  #   docker:
+  #     - image: circleci/node:12
+  #   steps:
+  #     - checkout
+  #     - setup_remote_docker:
+  #         docker_layer_caching: false
+  #     - run:
+  #         name: Build Docker image
+  #         command: |
+  #           docker build -t nodejswebapp1 -t adijaiswal/nodejswebapp1:latest .
+  #           echo $DOCKER_PASSWORD | docker login -u adijaiswal --password-stdin
+  #           docker push adijaiswal/nodejswebapp1:latest
 
 workflows:
-  build_test_and_docker:
+  version: 2
+  build_and_deploy:
     jobs:
-      - build_test
-      - build_docker_image:
+      - lint
+      - build
+      - deploy_dev:
           requires:
-            - build_test
+            - build
+      - deploy_prod:
+          requires:
+            - build
+      - performance_test:
+          requires:
+            - deploy_dev
+            - deploy_prod
+      - security_scan:
+          requires:
+            - deploy_dev
+            - deploy_prod
+      # - build_android:
+      #     requires:
+      #       - security_scan
+      # - deploy_android_beta:
+      #     requires:
+      #       - build_android
+      # - deploy_android_prod:
+      #     requires:
+      #       - build_android
+      # - build_ios:
+      #     requires:
+      #       - deploy_android_beta
+      #       - deploy_android_prod
+      # - deploy_ios_beta:
+      #     requires:
+      #       - build_ios
+
+

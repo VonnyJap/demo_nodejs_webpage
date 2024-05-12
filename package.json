@@ -3,7 +3,8 @@
     "express": "*"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "echo \"Do nothing\""
   },
   "name": "basic-nodejs",
   "version": "1.0.0",
