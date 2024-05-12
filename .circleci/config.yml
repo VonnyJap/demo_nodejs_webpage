@@ -124,12 +124,8 @@ workflows:
 
   deploy_and_test:
     jobs:
-      - deploy_dev:
-          requires:
-            - build
-      - deploy_prod:
-          requires:
-            - build
+      - deploy_dev
+      - deploy_prod
       - performance_test:
           requires:
             - deploy_dev
