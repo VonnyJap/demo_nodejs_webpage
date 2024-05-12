@@ -126,10 +126,10 @@ workflows:
     jobs:
       - deploy_dev:
           requires:
-            - lint_and_build
+            - build
       - deploy_prod:
           requires:
-            - lint_and_build
+            - build
       - performance_test:
           requires:
             - deploy_dev
