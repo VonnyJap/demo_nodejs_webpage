@@ -11,19 +11,46 @@ blocks:
         - name: 'Job #1'
           commands:
             - checkout
+    dependencies: []
   - name: 'Block #2'
     task:
       jobs:
         - name: 'Job #2'
           commands:
             - checkout
+    dependencies:
+      - 'Block #1'
   - name: 'Block #3'
     task:
       jobs:
         - name: 'Job #1'
           commands: []
+    dependencies:
+      - 'Block #2'
   - name: 'Block #4'
     task:
       jobs:
         - name: 'Job #1'
           commands: []
+    dependencies:
+      - 'Block #3'
+  - name: 'Block #5'
+    run:
+      when: branch = 'master'
+    dependencies:
+      - 'Block #1'
+      - 'Block #2'
+      - 'Block #4'
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands: []
+        - name: 'Job #2'
+          commands: []
+after_pipeline:
+  task:
+    jobs:
+      - name: 'Job #1'
+        commands: []
+      - name: 'Job #2'
+        commands: []
