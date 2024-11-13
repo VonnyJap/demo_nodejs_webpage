@@ -103,6 +103,77 @@ blocks:
           commands: []
         - name: 'Job #2'
           commands: []
+  - name: 'Block #6'
+    dependencies:
+      - 'Block #1'
+      - 'Block #2'
+      - 'Block #3'
+      - 'Block #4'
+      - 'Block #5'
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands: []
+  - name: 'Block #7'
+    dependencies:
+      - 'Block #1'
+      - 'Block #2'
+      - 'Block #3'
+      - 'Block #4'
+      - 'Block #5'
+      - 'Block #6'
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands: []
+        - name: 'Job #2'
+          commands: []
+        - name: 'Job #3'
+          commands: []
+        - name: 'Job #4'
+          commands: []
+        - name: 'Job #5'
+          commands: []
+        - name: 'Job #6'
+          commands: []
+        - name: 'Job #7'
+          commands: []
+        - name: 'Job #8'
+          commands: []
+        - name: 'Job #9'
+          commands: []
+        - name: 'Job #10'
+          commands: []
+        - name: 'Job #11'
+          commands: []
+        - name: 'Job #12'
+          commands: []
+        - name: 'Job #13'
+          commands: []
+        - name: 'Job #14'
+          commands: []
+        - name: 'Job #15'
+          commands: []
+        - name: 'Job #16'
+          commands: []
+        - name: 'Job #17'
+          commands: []
+        - name: 'Job #18'
+          commands: []
+        - name: 'Job #19'
+          commands: []
+        - name: 'Job #20'
+          commands: []
+        - name: 'Job #21'
+          commands: []
+        - name: 'Job #22'
+          commands: []
+        - name: 'Job #23'
+          commands: []
+        - name: 'Job #24'
+          commands: []
+        - name: 'Job #25'
+          commands: []
 after_pipeline:
   task:
     jobs:
