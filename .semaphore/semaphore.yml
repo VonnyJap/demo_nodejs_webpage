@@ -30,8 +30,6 @@ blocks:
           commands: []
         - name: 'Job #8'
           commands: []
-        - name: 'Job #9'
-          commands: []
         - name: 'Job #10'
           commands: []
         - name: 'Job #11'
