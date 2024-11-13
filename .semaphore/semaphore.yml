@@ -18,8 +18,6 @@ blocks:
         - name: 'Job #2'
           commands:
             - checkout
-        - name: 'Job #2'
-          commands: []
         - name: 'Job #3'
           commands: []
         - name: 'Job #4'
